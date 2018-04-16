@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 
 namespace AMANDAPI.Models
 {
+    /*
+     * 
+     */
+
     public class Image
     {
         public int Id { get; set; }

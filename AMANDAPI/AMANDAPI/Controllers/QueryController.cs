@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AMANDAPI.Models
+namespace AMANDAPI.Controllers
 {
-    public class ImageController : Controller
+    public class QueryController : Controller
     {
         [HttpGet]
         public IActionResult Index()
