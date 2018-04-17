@@ -15,14 +15,14 @@ namespace AMANDAPI.Controllers
 {
 
     [Route("api/image")]
-   
+
     public class ImageController : Controller
     {
 
         private readonly ImagesContext _context;
 
         const string accessKey = "26f5d2c5dad8494b867de53f057850c1";
-        
+
         //constructor connecting to the database
         public ImageController(ImagesContext context)
         {
@@ -56,14 +56,49 @@ namespace AMANDAPI.Controllers
             }
             return JsonConvert.DeserializeObject<BingJson>(responseString);
         }
-       
 
 
-        [HttpGet("{sentiment:float}")]
-        public IActionResult Index(float sentiment)
+
+        //[HttpGet("{sentiment}")]
+        /*GetURLFromSentiment this method is being called to create a generics list of images using a LINQ that we
+         * pass in the sentiment and match it against our database of cat images.
+       */
+        public List<string> GetURLFromSentiment(string sentiment)
         {
 
+            float floatName = float.Parse(sentiment);
+            List<string> Images = _context.Images
+                                        // comparing an image list by the image sentiment to target sentiment
+                                        .OrderBy(i => Math.Abs(float.Parse(i.Sentiment) - floatName))
+                                        //allowing user to see url
+                                        .Select(x => x.URL)
+                                        // setting to list
+                                        .ToList();
+
+            return Images;
         }
+
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var ImageDelete = _context.Images
+                        .FirstOrDefault(t => t.Id == id);
+            if (ImageDelete == null)
+            {
+                return NotFound();
+            }
+
+            _context.Images.Remove(ImageDelete);
+            _context.SaveChanges();
+            return new NoContentResult();
+        }
+
+
+
+
+
+
 
         [HttpPost]
         public IActionResult Create()
@@ -83,5 +118,20 @@ namespace AMANDAPI.Controllers
             return View();
         }
 
-    }
+    }// Bottom of the v
+
+    
+
+
+
+
+
+
+
+
+
+
 }
+}
+
+    
