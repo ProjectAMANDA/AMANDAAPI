@@ -9,7 +9,7 @@ using AMANDAPI.Models;
 namespace AMANDAPI.Controllers
 {
 
-    [Route("api/imageController")]
+    [Route("api/image")]
    
     public class ImageController : Controller
     {
