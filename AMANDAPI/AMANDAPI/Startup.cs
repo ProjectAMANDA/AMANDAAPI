@@ -42,7 +42,7 @@ namespace AMANDAPI
             app.UseMvc();
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Hello World!");
+                await context.Response.WriteAsync("Welcome to Project AMANDA stuff ain't done yet");
             });
         }
         
