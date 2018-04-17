@@ -9,15 +9,21 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json;
 using System.Web;
+using AMANDAPI.Models;
 
-namespace AMANDAPI.Models
+namespace AMANDAPI.Controllers
 {
+
+    [Route("api/image")]
+   
     public class ImageController : Controller
     {
-        private ImagesContext _context;
+
+        private readonly ImagesContext _context;
 
         const string accessKey = "26f5d2c5dad8494b867de53f057850c1";
-
+        
+        //constructor connecting to the database
         public ImageController(ImagesContext context)
         {
             _context = context;
@@ -50,12 +56,13 @@ namespace AMANDAPI.Models
             }
             return JsonConvert.DeserializeObject<BingJson>(responseString);
         }
+       
 
-        [HttpGet]
-        public IActionResult Index()
+
+        [HttpGet("{sentiment:float}")]
+        public IActionResult Index(float sentiment)
         {
 
-            return View();
         }
 
         [HttpPost]
