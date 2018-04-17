@@ -39,10 +39,13 @@ namespace AMANDAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMvc();
             app.Run(async (context) =>
             {
                 await context.Response.WriteAsync("Hello World!");
             });
         }
+        
+
     }
 }
