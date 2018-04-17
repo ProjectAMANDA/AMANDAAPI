@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using AMANDAPI.Models;
 
 namespace AMANDAPI.Models
 {
@@ -15,8 +16,13 @@ namespace AMANDAPI.Models
         }
 
         [HttpPost]
-        public IActionResult Create()
+        public IActionResult Create([FromBody] Image image)
         {
+            if (image == null)
+            {
+                return BadRequest();
+            }
+
             return View();
         }
 

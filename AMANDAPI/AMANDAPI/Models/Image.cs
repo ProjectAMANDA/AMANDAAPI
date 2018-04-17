@@ -15,7 +15,7 @@ namespace AMANDAPI.Models
         public string Name { get; set; }
         public string URL { get; set; }
         public string Tags { get; set; }
-        public string Sentiment { get; set; }
+        public float Sentiment { get; set; }
         public string Source { get; set; }
     }
 }
