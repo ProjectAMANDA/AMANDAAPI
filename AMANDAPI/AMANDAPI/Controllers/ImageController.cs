@@ -3,15 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using AMANDAPI.Data;
+using AMANDAPI.Models;
 
-namespace AMANDAPI.Models
+namespace AMANDAPI.Controllers
 {
+
+    [Route("api/imageController")]
+   
     public class ImageController : Controller
     {
-        [HttpGet]
-        public IActionResult Index()
+        
+        private readonly ImagesContext _context;
+
+        //constructor connecting to the database
+        public ImageController(ImagesContext context)
         {
-            return View();
+            _context = context;
+        }
+
+
+        [HttpGet("{sentiment:float}")]
+        public IActionResult Index(float sentiment)
+        {
+
         }
 
         [HttpPost]
