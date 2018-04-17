@@ -12,7 +12,7 @@ namespace AMANDAPI.Controllers
 {   
     public class AnalyticsController : Controller
     {
-        public Models.Analytics Index(string body)
+        private Models.Analytics Index(string body)
         {
             // Create a client.
             ITextAnalyticsAPI client = new TextAnalyticsAPI();
