@@ -57,6 +57,13 @@ namespace AMANDAPI.Controllers
             return JsonConvert.DeserializeObject<BingJson>(responseString);
         }
 
+       
+        [HttpGet]
+        public IEnumerable<Image> GetAllImagesInDb()
+        {              
+            return _context.Images.ToList();
+
+
 
 
         //[HttpGet("{sentiment}")]
@@ -94,15 +101,15 @@ namespace AMANDAPI.Controllers
             return new NoContentResult();
         }
 
-
-
-
-
-
-
         [HttpPost]
-        public IActionResult Create()
+        public IActionResult Create([FromBody]Image image)
         {
+            if (image == null)
+            {
+                return BadRequest();
+            }
+            _context.Images.Add(image);
+            _context.SaveChanges();
             return View();
         }
 
@@ -119,18 +126,6 @@ namespace AMANDAPI.Controllers
         }
 
     }// Bottom of the v
-
-    
-
-
-
-
-
-
-
-
-
-
 }
 }
 

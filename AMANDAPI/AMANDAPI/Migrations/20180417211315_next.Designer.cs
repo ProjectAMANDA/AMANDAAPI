@@ -11,9 +11,10 @@ using System;
 namespace AMANDAPI.Migrations
 {
     [DbContext(typeof(ImagesContext))]
-    partial class ImagesContextModelSnapshot : ModelSnapshot
+    [Migration("20180417211315_next")]
+    partial class next
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
