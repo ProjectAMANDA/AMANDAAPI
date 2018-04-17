@@ -79,6 +79,26 @@ namespace AMANDAPI.Controllers
         }
 
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var ImageDelete = _context.Images
+                        .FirstOrDefault(t => t.Id == id);
+            if (ImageDelete == null)
+            {
+                return NotFound();
+            }
+
+            _context.Images.Remove(ImageDelete);
+            _context.SaveChanges();
+            return new NoContentResult();
+        }
+
+
+
+
+
+
 
         [HttpPost]
         public IActionResult Create()
