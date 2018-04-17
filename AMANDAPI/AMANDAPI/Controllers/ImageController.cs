@@ -35,8 +35,8 @@ namespace AMANDAPI.Models
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", accessKey);
 
             // Request parameters
-            queryString["q"] = "cats";
-            queryString["count"] = "10";
+            queryString["q"] = searchQuery;
+            queryString["count"] = "15";
             queryString["offset"] = "0";
             queryString["mkt"] = "en-us";
             queryString["safeSearch"] = "Strict";
