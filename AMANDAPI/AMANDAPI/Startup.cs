@@ -26,9 +26,9 @@ namespace AMANDAPI
         {
             services.AddMvc();
 
-            //services.AddDbContext<ImagesContext>(options =>
-            //   options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")
-            //   ));
+            services.AddDbContext<ImagesContext>(options =>
+               options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")
+               ));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +40,12 @@ namespace AMANDAPI
             }
 
             app.UseMvc();
+            app.Run(async (context) =>
+            {
+                await context.Response.WriteAsync("Hello World!");
+            });
         }
+        
+
     }
 }
