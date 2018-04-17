@@ -10,19 +10,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AMANDAPI.Controllers
 {   
-    [Route("api/Analytics")]
     public class AnalyticsController : Controller
     {
-        // GET: /<controller>/
-        [HttpGet]
-        public IActionResult Index([FromHeader] string body)
+        public Models.Analytics Index(string body)
         {
             // Create a client.
             ITextAnalyticsAPI client = new TextAnalyticsAPI();
             client.AzureRegion = AzureRegions.Westcentralus;
             client.SubscriptionKey = "d8646ffcf51c4855a5d348e682b270c0";
 
-            List<string> keyPhrases = new List<string>();
+            List<string> keyPhrases = new List<string>();//output
+            float sentiment = 0;
 
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
@@ -55,14 +53,13 @@ namespace AMANDAPI.Controllers
                           new MultiLanguageInput("en", "0", body)
                         }));
 
-            float sentiment = 0;
             // Printing sentiment results
             foreach (var document in result3.Documents)
             {
                 sentiment = (float)document.Score;
             }
 
-            return new  ObjectResult(new { keyPhrases, sentiment });
+            return new Models.Analytics() { Keywords = keyPhrases, Sentiment =  sentiment };
         }
     }
 }
