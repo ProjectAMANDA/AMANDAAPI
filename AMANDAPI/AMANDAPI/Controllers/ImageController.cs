@@ -57,17 +57,21 @@ namespace AMANDAPI.Controllers
             return JsonConvert.DeserializeObject<BingJson>(responseString);
         }
        
-
-
-        [HttpGet("{sentiment:float}")]
-        public IActionResult Index(float sentiment)
-        {
-
+        [HttpGet]
+        public IEnumerable<Image> GetAllImagesInDb()
+        {              
+            return _context.Images.ToList();
         }
 
         [HttpPost]
-        public IActionResult Create()
+        public IActionResult Create([FromBody]Image image)
         {
+            if (image == null)
+            {
+                return BadRequest();
+            }
+            _context.Images.Add(image);
+            _context.SaveChanges();
             return View();
         }
 
