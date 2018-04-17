@@ -12,6 +12,8 @@ namespace AMANDAPI.Controllers
 {   
     public class AnalyticsController : Controller
     {
+        // I'm assuming this model will eventually need
+        // to be moved into the images controller. If so, change to private
         private Models.Analytics Index(string body)
         {
             // Create a client.

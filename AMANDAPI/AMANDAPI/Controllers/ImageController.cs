@@ -58,6 +58,13 @@ namespace AMANDAPI.Controllers
         }
 
 
+        [HttpGet]
+        public IEnumerable<Image> GetAllImagesInDb()
+        {
+            return _context.Images.ToList();
+
+        }
+
 
         //[HttpGet("{sentiment}")]
         /*GetURLFromSentiment this method is being called to create a generics list of images using a LINQ that we
@@ -94,15 +101,15 @@ namespace AMANDAPI.Controllers
             return new NoContentResult();
         }
 
-
-
-
-
-
-
         [HttpPost]
-        public IActionResult Create()
+        public IActionResult Create([FromBody]Image image)
         {
+            if (image == null)
+            {
+                return BadRequest();
+            }
+            _context.Images.Add(image);
+            _context.SaveChanges();
             return View();
         }
 
@@ -119,19 +126,6 @@ namespace AMANDAPI.Controllers
         }
 
     }// Bottom of the v
-
-    
-
-
-
-
-
-
-
-
-
-
-}
 }
 
     
