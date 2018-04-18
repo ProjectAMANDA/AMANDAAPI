@@ -10,17 +10,19 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Web;
 using AMANDAPI.Models;
+using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
+
 
 namespace AMANDAPI.Controllers
 {
     [Route("api/image")]
     public class ImageController : Controller
     {
-
         private readonly ImagesContext _context;
-
+        // Bing API key
         const string accessKey = "26f5d2c5dad8494b867de53f057850c1";
 
         //constructor connecting to the database
@@ -29,15 +31,13 @@ namespace AMANDAPI.Controllers
             _context = context;
         }
 
-        // "[?q][&count][&offset][&mkt][&safeSearch]"
-
-        public async Task<BingJson> BingSearch(string searchQuery)
+        public async Task<IEnumerable<string>> BingSearch(string searchQuery)
         {
-
             var client = new HttpClient();
+            //Create our query string dictionary starting with an empty string
             var queryString = HttpUtility.ParseQueryString(string.Empty);
 
-            // Request headers
+            // Set the authentication headers
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", accessKey);
 
             // Request parameters
@@ -46,26 +46,37 @@ namespace AMANDAPI.Controllers
             queryString["offset"] = "0";
             queryString["mkt"] = "en-us";
             queryString["safeSearch"] = "Strict";
+            // Build the query string
             string uri = "https://api.cognitive.microsoft.com/bing/v7.0/images/search?" + queryString;
-
+            // Make the call to Bing Image Search API
             var response = await client.GetAsync(uri);
+            // Pull a string out of the response body
             string responseString = await response.Content.ReadAsStringAsync();
+            // CHeck if we got something back from Bing
             if (responseString != null)
             {
-                return JsonConvert.DeserializeObject<BingJson>(responseString);
+                //Parse just the JSON we care about into a JObject
+                var data = JObject.Parse(responseString)["value"];
+                //Pull the list of thumbnail URLs
+                IEnumerable<string> valueList = from JObject n 
+                                                in data
+                                                select n["thumbnailUrl"].ToString();
+
+                return valueList.ToList();
             }
-            return JsonConvert.DeserializeObject<BingJson>(responseString);
+            //If Bing did not return a result send back an empty list
+            return new List<string>();
         }
 
 
-        //[HttpGet]
-        //public IEnumerable<Image> GetAllImagesInDb()
-        //{
-        //    return _context.Images.ToList();
-
-        //}
-
-        [HttpGet("{data}/{usesentiment}/{num}")]
+        /// <summary>
+        /// Main meat of the app
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="usesentiment"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        [HttpGet("{data}/{usesentiment?}/{num?}")]
         public IEnumerable<string> GetUrls(string data, string usesentiment = "true", string num = "3" )
         {
             int numRecs;
@@ -79,7 +90,9 @@ namespace AMANDAPI.Controllers
             {
                 numRecs = 3;
             }
-            List<string> reccomendations = usesentiment == "true" ? GetURLFromSentiment(float.Parse(data)) : new List<string> { "brent made a mistake", "blame it on brent"};//Bing search results will go here
+
+            IEnumerable<string> reccomendations = usesentiment == "true" ? GetURLFromSentiment(float.Parse(data)) : BingSearch(data).Result;//Bing search results will go here
+
             return reccomendations.Take(numRecs);
         }
 
@@ -100,7 +113,11 @@ namespace AMANDAPI.Controllers
             return Images;
         }
 
-
+        /// <summary>
+        /// Removes items from database
+        /// </summary>
+        /// <param name="id">id of image to remove</param>
+        /// <returns>does not matter.</returns>
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -116,6 +133,11 @@ namespace AMANDAPI.Controllers
             return new NoContentResult();
         }
 
+        /// <summary>
+        /// This was used to populate the database.
+        /// </summary>
+        /// <param name="image">Image to add to the database</param>
+        /// <returns>does not matter.</returns>
         [HttpPost]
         public IActionResult Create([FromBody]Image image)
         {
@@ -133,58 +155,5 @@ namespace AMANDAPI.Controllers
         {
             return View();
         }
-
-        // I'm assuming this model will eventually need
-        // to be moved into the images controller. If so, change to private
-        private Analytics Analyze(string body)
-        {
-            // Create a client.
-            ITextAnalyticsAPI client = new TextAnalyticsAPI();
-            client.AzureRegion = AzureRegions.Westcentralus;
-            client.SubscriptionKey = "d8646ffcf51c4855a5d348e682b270c0";
-
-            List<string> keyPhrases = new List<string>();//output
-            float sentiment = 0;
-
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
-
-            // Getting key-phrases
-
-            KeyPhraseBatchResult result2 = client.KeyPhrases(
-                    new MultiLanguageBatchInput(
-                        new List<MultiLanguageInput>()
-                        {
-                          new MultiLanguageInput("en", "3", body),
-                        }));
-
-
-            // keyphrases
-            foreach (var document in result2.Documents)
-            {
-
-                foreach (string keyphrase in document.KeyPhrases)
-                {
-                    keyPhrases.Add(keyphrase);
-                }
-            }
-
-            // Extracting sentiment
-            SentimentBatchResult result3 = client.Sentiment(
-                    new MultiLanguageBatchInput(
-                        new List<MultiLanguageInput>()
-                        {
-                          new MultiLanguageInput("en", "0", body)
-                        }));
-
-            // sentiment results
-            foreach (var document in result3.Documents)
-            {
-                sentiment = (float)document.Score;
-            }
-
-            return new Analytics() { Keywords = keyPhrases, Sentiment = sentiment };
-        }
-    }// Bottom of the v
+    }
 }
-
-    
