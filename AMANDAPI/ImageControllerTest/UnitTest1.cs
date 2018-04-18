@@ -23,9 +23,8 @@ namespace ImageControllerTest
                 //Act
                 var results = await controller.BingSearch("cats");
 
-
                 //Assert
-                int x = 10;
+                Assert.IsAssignableFrom<IEnumerable>(results);
             }
         }
     }
