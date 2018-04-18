@@ -27,7 +27,7 @@ namespace AMANDAPI
             services.AddMvc();
 
             services.AddDbContext<ImagesContext>(options =>
-               options.UseSqlServer(Configuration.GetConnectionString("AzureConnection")
+               options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")
                ));
         }
 

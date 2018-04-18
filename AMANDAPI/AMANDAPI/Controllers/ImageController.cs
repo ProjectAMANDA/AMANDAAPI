@@ -31,7 +31,7 @@ namespace AMANDAPI.Controllers
             _context = context;
         }
 
-        public async Task<IEnumerable<string>> BingSearch(string searchQuery)
+        public async Task<IEnumerable<Image>> BingSearch(string searchQuery)
         {
             var client = new HttpClient();
             //Create our query string dictionary starting with an empty string
@@ -58,14 +58,13 @@ namespace AMANDAPI.Controllers
                 //Parse just the JSON we care about into a JObject
                 var data = JObject.Parse(responseString)["value"];
                 //Pull the list of thumbnail URLs
-                IEnumerable<string> valueList = from JObject n 
+                IEnumerable<Image> valueList = from JObject n 
                                                 in data
-                                                select n["thumbnailUrl"].ToString();
-
+                                                select new Image(n["thumbnailUrl"].ToString());
                 return valueList.ToList();
             }
             //If Bing did not return a result send back an empty list
-            return new List<string>();
+            return new List<Image>();
         }
 
 
@@ -76,24 +75,29 @@ namespace AMANDAPI.Controllers
         /// <param name="usesentiment"></param>
         /// <param name="num"></param>
         /// <returns></returns>
-        [HttpGet("{data}/{usesentiment?}/{num?}")]
-        public IEnumerable<string> GetUrls(string data, string usesentiment = "true", string num = "3" )
+        [HttpGet("{data}/{num?}")]
+        public IEnumerable<Image> GetUrls(string data, int num = 3 )
         {
-            int numRecs;
+            bool usesentiment = false;
             try
             {
-                numRecs = int.Parse(num);
-                if (numRecs > 6)
+                if (num > 6)
                     throw new Exception();
             }
             catch
             {
-                numRecs = 3;
+                num = 3;
+            }
+            float sentiment = 0;
+            if (!float.TryParse(data, out sentiment))
+            {
+                usesentiment = true;
             }
 
-            IEnumerable<string> reccomendations = usesentiment == "true" ? GetURLFromSentiment(float.Parse(data)) : BingSearch(data).Result;//Bing search results will go here
-
-            return reccomendations.Take(numRecs);
+            IEnumerable<Image> reccomendations = usesentiment ?
+                GetImageBySentiment(sentiment) :
+                BingSearch(data).Result;
+            return reccomendations.Take(num);
         }
 
 
@@ -101,13 +105,11 @@ namespace AMANDAPI.Controllers
         /*GetURLFromSentiment this method is being called to create a generics list of images using a LINQ that we
          * pass in the sentiment and match it against our database of cat images.
        */
-        public List<string> GetURLFromSentiment(float sentiment)
+        public List<Image> GetImageBySentiment(float sentiment)
         {
-            List<string> Images = _context.Images
+            List<Image> Images = _context.Images
                                         // comparing an image list by the image sentiment to target sentiment
-                                        .OrderBy(i => Math.Abs(float.Parse(i.Sentiment) - sentiment))
-                                        //allowing user to see url
-                                        .Select(x => x.URL)
+                                        .OrderBy(i => Math.Abs(i.Sentiment - sentiment))
                                         // setting to list
                                         .ToList();
             return Images;
