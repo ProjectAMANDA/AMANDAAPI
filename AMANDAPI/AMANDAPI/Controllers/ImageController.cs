@@ -12,18 +12,20 @@ using System.Web;
 using AMANDAPI.Models;
 using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
+using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
+
 
 namespace AMANDAPI.Controllers
 {
 
     [Route("api/image")]
-   
     public class ImageController : Controller
     {
         private readonly ImagesContext _context;
         // Bing API key
         const string accessKey = "26f5d2c5dad8494b867de53f057850c1";
-        
+
         //constructor connecting to the database
         public ImageController(ImagesContext context)
         {
@@ -63,13 +65,71 @@ namespace AMANDAPI.Controllers
 
                 return valueList.ToList();
             }
+
             //If Bing did not return a result send back an empty list
             return new List<string>();
+
+      
+        }
+
+
+        //[HttpGet]
+        //public IEnumerable<Image> GetAllImagesInDb()
+        //{
+        //    return _context.Images.ToList();
+
+        //}
+
+        [HttpGet]
+        public IEnumerable<string> GetUrls([FromHeader] string text)
+        {
+            Analytics analysis = Analyze(text);
+            return GetURLFromSentiment(analysis.Sentiment);
+        }
+
+
+        //[HttpGet("{sentiment}")]
+        /*GetURLFromSentiment this method is being called to create a generics list of images using a LINQ that we
+         * pass in the sentiment and match it against our database of cat images.
+       */
+        public List<string> GetURLFromSentiment(float sentiment)
+        {
+            List<string> Images = _context.Images
+                                        // comparing an image list by the image sentiment to target sentiment
+                                        .OrderBy(i => Math.Abs(float.Parse(i.Sentiment) - sentiment))
+                                        //allowing user to see url
+                                        .Select(x => x.URL)
+                                        // setting to list
+                                        .ToList();
+            return Images;
+        }
+
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var ImageDelete = _context.Images
+                        .FirstOrDefault(t => t.Id == id);
+            if (ImageDelete == null)
+            {
+                return NotFound();
+            }
+
+            _context.Images.Remove(ImageDelete);
+            _context.SaveChanges();
+            return new NoContentResult();
+
         }
 
         [HttpPost]
-        public IActionResult Create()
+        public IActionResult Create([FromBody]Image image)
         {
+            if (image == null)
+            {
+                return BadRequest();
+            }
+            _context.Images.Add(image);
+            _context.SaveChanges();
             return View();
         }
 
@@ -79,12 +139,59 @@ namespace AMANDAPI.Controllers
             return View();
         }
 
-        [HttpDelete]
-        public IActionResult Delete()
+        // I'm assuming this model will eventually need
+        // to be moved into the images controller. If so, change to private
+        private Analytics Analyze(string body)
         {
-            return View();
-        }
+            // Create a client.
+            ITextAnalyticsAPI client = new TextAnalyticsAPI();
+            client.AzureRegion = AzureRegions.Westcentralus;
+            client.SubscriptionKey = "d8646ffcf51c4855a5d348e682b270c0";
 
+            List<string> keyPhrases = new List<string>();//output
+            float sentiment = 0;
+
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+
+            // Getting key-phrases
+
+            KeyPhraseBatchResult result2 = client.KeyPhrases(
+                    new MultiLanguageBatchInput(
+                        new List<MultiLanguageInput>()
+                        {
+                          new MultiLanguageInput("en", "3", body),
+                        }));
+
+
+            // Printing keyphrases
+            foreach (var document in result2.Documents)
+            {
+
+                foreach (string keyphrase in document.KeyPhrases)
+                {
+                    keyPhrases.Add(keyphrase);
+                }
+            }
+
+            // Extracting sentiment
+
+            SentimentBatchResult result3 = client.Sentiment(
+                    new MultiLanguageBatchInput(
+                        new List<MultiLanguageInput>()
+                        {
+                          new MultiLanguageInput("en", "0", body)
+                        }));
+
+            // Printing sentiment results
+            foreach (var document in result3.Documents)
+            {
+                sentiment = (float)document.Score;
+            }
+
+            return new Models.Analytics() { Keywords = keyPhrases, Sentiment = sentiment };
+        }
     }
 
 }
+
+    
