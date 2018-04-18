@@ -12,7 +12,7 @@ using System.Web;
 using AMANDAPI.Models;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
-
+using Microsoft.AspNetCore.Routing;
 
 namespace AMANDAPI.Controllers
 {
@@ -37,27 +37,10 @@ namespace AMANDAPI.Controllers
                 data = analysis.Sentiment.ToString();
             }
 
-            return RedirectToAction("GetURLs", "ImageController", new { data, usesentiment, num = "3" });
+            return RedirectToAction("GetURLs", "ImageController", new RouteValueDictionary { { "data", data }, {"usesentiment", usesentiment}, { "num", "3"} });
 
-
-           
-
-
-
-            
-          
-            //first sentiemtne 
-            //float point
-            //numRecs
-            //Setiemnt switch 
         }
 
-
-
-       
-       //return GetUrls; 
-        //redirect to GetURL
-        //setiem and keywords 
 
 
 
