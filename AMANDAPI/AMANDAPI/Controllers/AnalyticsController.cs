@@ -44,7 +44,6 @@ namespace AMANDAPI.Controllers
             }
             return RedirectToAction("GetUrls", "Image", new { data, usesentiment, num });
         }
-
         private Analytics Analyze(string body)
         {
             // Create a client.
