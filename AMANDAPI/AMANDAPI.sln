@@ -5,8 +5,9 @@ VisualStudioVersion = 15.0.27428.2011
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AMANDAPI", "AMANDAPI\AMANDAPI.csproj", "{A67FF2F5-63A8-452B-9092-C6EFDB91C7C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageControllerTest", "ImageControllerTest\ImageControllerTest.csproj", "{0C21EE40-C167-4B6A-B570-046AA824C8A2}"
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTestProject1", "XUnitTestProject1\XUnitTestProject1.csproj", "{86A57B84-0AC0-4783-91C6-74183B7D7EB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageControllerTest", "ImageControllerTest\ImageControllerTest.csproj", "{0C21EE40-C167-4B6A-B570-046AA824C8A2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTestProject1", "XUnitTestProject1\XUnitTestProject1.csproj", "{86A57B84-0AC0-4783-91C6-74183B7D7EB8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,6 +23,10 @@ Global
 		{0C21EE40-C167-4B6A-B570-046AA824C8A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C21EE40-C167-4B6A-B570-046AA824C8A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C21EE40-C167-4B6A-B570-046AA824C8A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86A57B84-0AC0-4783-91C6-74183B7D7EB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86A57B84-0AC0-4783-91C6-74183B7D7EB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86A57B84-0AC0-4783-91C6-74183B7D7EB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86A57B84-0AC0-4783-91C6-74183B7D7EB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
