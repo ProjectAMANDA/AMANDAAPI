@@ -65,23 +65,22 @@ namespace AMANDAPI.Controllers
 
         //}
 
-        [HttpGet("{keyword}"})]
-        public IEnumerable<string> GetUrls([FromHeader] string text, [FromHeader] string sentiment = "true", [FromHeader] string numRecs = "3" )
+        [HttpGet("{data}/{usesentiment}/{num}")]
+        public IEnumerable<string> GetUrls(string data, string usesentiment = "true", string num = "3" )
         {
-            int num;
+            int numRecs;
             try
             {
-                num = int.Parse(numRecs);
-                if (num > 6)
+                numRecs = int.Parse(num);
+                if (numRecs > 6)
                     throw new Exception();
             }
             catch
             {
-                num = 3;
+                numRecs = 3;
             }
-            Analytics analysis = Analyze(text);
-            List<string> reccomendations = sentiment == "true" ? GetURLFromSentiment(analysis.Sentiment) : new List<string> { "brent made a mistake", "blame it on brent"};//Bing search results will go here
-            return reccomendations.Take(num);
+            List<string> reccomendations = usesentiment == "true" ? GetURLFromSentiment(float.Parse(data)) : new List<string> { "brent made a mistake", "blame it on brent"};//Bing search results will go here
+            return reccomendations.Take(numRecs);
         }
 
 
