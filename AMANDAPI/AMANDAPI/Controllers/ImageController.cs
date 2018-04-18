@@ -93,7 +93,9 @@ namespace AMANDAPI.Controllers
             {
                 numRecs = 3;
             }
-            List<string> reccomendations = usesentiment == "true" ? GetURLFromSentiment(float.Parse(data)) : new List<string> { "brent made a mistake", "blame it on brent"};//Bing search results will go here
+
+            IEnumerable<string> reccomendations = usesentiment == "true" ? GetURLFromSentiment(float.Parse(data)) : BingSearch(data).Result;//Bing search results will go here
+
             return reccomendations.Take(numRecs);
         }
 
