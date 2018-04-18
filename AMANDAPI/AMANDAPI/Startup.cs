@@ -27,7 +27,7 @@ namespace AMANDAPI
             services.AddMvc();
 
             services.AddDbContext<ImagesContext>(options =>
-               options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")
+               options.UseSqlServer(Configuration.GetConnectionString("AzureConnection")
                ));
         }
 
@@ -39,10 +39,13 @@ namespace AMANDAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMvc();
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Hello World!");
+                await context.Response.WriteAsync("Welcome to Project AMANDA stuff ain't done yet");
             });
         }
+        
+
     }
 }
