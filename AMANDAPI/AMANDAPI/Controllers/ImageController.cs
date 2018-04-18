@@ -69,6 +69,13 @@ namespace AMANDAPI.Controllers
             return new List<string>();
         }
 
+        /// <summary>
+        /// Main meat of the app
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="usesentiment"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
         [HttpGet("{data}/{usesentiment?}/{num?}")]
         public IEnumerable<string> GetUrls(string data, string usesentiment = "true", string num = "3" )
         {
@@ -104,7 +111,11 @@ namespace AMANDAPI.Controllers
             return Images;
         }
 
-
+        /// <summary>
+        /// Removes items from database
+        /// </summary>
+        /// <param name="id">id of image to remove</param>
+        /// <returns>does not matter.</returns>
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -118,9 +129,13 @@ namespace AMANDAPI.Controllers
             _context.Images.Remove(ImageDelete);
             _context.SaveChanges();
             return new NoContentResult();
-
         }
 
+        /// <summary>
+        /// This was used to populate the database.
+        /// </summary>
+        /// <param name="image">Image to add to the database</param>
+        /// <returns>does not matter.</returns>
         [HttpPost]
         public IActionResult Create([FromBody]Image image)
         {

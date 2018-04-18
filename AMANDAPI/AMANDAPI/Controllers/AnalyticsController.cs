@@ -59,7 +59,6 @@ namespace AMANDAPI.Controllers
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
             // Getting key-phrases
-
             KeyPhraseBatchResult result2 = client.KeyPhrases(
                     new MultiLanguageBatchInput(
                         new List<MultiLanguageInput>()
@@ -67,11 +66,9 @@ namespace AMANDAPI.Controllers
                           new MultiLanguageInput("en", "3", body),
                         }));
 
-
             // Unpack key-phrases
             foreach (var document in result2.Documents)
             {
-
                 foreach (string keyphrase in document.KeyPhrases)
                 {
                     keyPhrases.Add(keyphrase);
