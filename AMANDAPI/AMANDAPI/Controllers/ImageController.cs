@@ -64,20 +64,9 @@ namespace AMANDAPI.Controllers
 
                 return valueList.ToList();
             }
-
             //If Bing did not return a result send back an empty list
             return new List<string>();
-
-      
         }
-
-
-        //[HttpGet]
-        //public IEnumerable<Image> GetAllImagesInDb()
-        //{
-        //    return _context.Images.ToList();
-
-        //}
 
         [HttpGet("{data}/{usesentiment}/{num}")]
         public IEnumerable<string> GetUrls(string data, string usesentiment = "true", string num = "3" )
@@ -202,7 +191,4 @@ namespace AMANDAPI.Controllers
             return new Analytics() { Keywords = keyPhrases, Sentiment = sentiment };
         }
     }
-
 }
-
-    
