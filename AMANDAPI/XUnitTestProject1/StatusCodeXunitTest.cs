@@ -16,6 +16,7 @@ namespace XUnitTestProject1
         [Fact]
         public void TestStatusCode()
         {
+
             var Options = new DbContextOptionsBuilder<ImagesContext>()
                 .UseInMemoryDatabase(databaseName: "testDb")
                 .Options;
@@ -31,7 +32,7 @@ namespace XUnitTestProject1
                 context.Images.Add(image);
                 context.SaveChanges();
                 //act
-                  var result = controller.GetUrls(".314", "true", "1");
+                var result = controller.GetUrls(".314", "true", "1");
                 string temp = "";
                 foreach (var item in result)
                 {
@@ -39,15 +40,10 @@ namespace XUnitTestProject1
                 }
                  var sc = result;
 
-
-
-
                 Assert.Equal(image.URL, temp );
                //Assert.Equal(HttpStatusCode.OK, (HttpStatusCode)sc.StatusCode.Value);
 
             }
-
-            //create two status code ojbects  to each other 
         }
 
     }
