@@ -13,18 +13,22 @@ using AMANDAPI.Models;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
 
+/* This is the controller used to Pull images from ImagesContext DB;
+ * There is also a controller used to pull from Microsoft Analytics API and Bing Search API */
+
 namespace AMANDAPI.Controllers
-{
+{   
 
     [Route("api/image")]
     public class ImageController : Controller
     {
-
+        //Setting ImagesContext DB to ready only
         private readonly ImagesContext _context;
 
+        // Kevin's access key
         const string accessKey = "26f5d2c5dad8494b867de53f057850c1";
 
-        //constructor connecting to the database
+        //constructor connecting to the database as _context
         public ImageController(ImagesContext context)
         {
             _context = context;
@@ -57,15 +61,10 @@ namespace AMANDAPI.Controllers
             }
             return JsonConvert.DeserializeObject<BingJson>(responseString);
         }
-
-
-        //[HttpGet]
-        //public IEnumerable<Image> GetAllImagesInDb()
-        //{
-        //    return _context.Images.ToList();
-
-        //}
-
+        
+        /* Get Method to pass sentiment to Microsoft analytics
+         *  User text -> [analytics] -> [context Database] */
+         
         [HttpGet]
         public IEnumerable<string> GetUrls([FromHeader] string text)
         {
@@ -73,23 +72,24 @@ namespace AMANDAPI.Controllers
             return GetURLFromSentiment(analysis.Sentiment);
         }
 
-
         //[HttpGet("{sentiment}")]
+
         /*GetURLFromSentiment this method is being called to create a generics list of images using a LINQ that we
-         * pass in the sentiment and match it against our database of cat images.
-       */
+          pass in the sentiment and match it against our context database of cat images.*/
+       
         public List<string> GetURLFromSentiment(float sentiment)
         {
             List<string> Images = _context.Images
-                                        // comparing an image list by the image sentiment to target sentiment
+                                        
                                         .OrderBy(i => Math.Abs(float.Parse(i.Sentiment) - sentiment))
-                                        //allowing user to see url
+                                        
                                         .Select(x => x.URL)
-                                        // setting to list
+                                      
                                         .ToList();
             return Images;
         }
 
+        /*Delete method for finding images by Image ID*/
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
@@ -105,6 +105,8 @@ namespace AMANDAPI.Controllers
             _context.SaveChanges();
             return new NoContentResult();
         }
+
+        /* Post method for adding the images to the body of our front-end*/
 
         [HttpPost]
         public IActionResult Create([FromBody]Image image)
@@ -124,13 +126,14 @@ namespace AMANDAPI.Controllers
             return View();
         }
 
-        // I'm assuming this model will eventually need
-        // to be moved into the images controller. If so, change to private
+        /* This method uses the Microsoft cognitive services */
+
         private Analytics Analyze(string body)
         {
             // Create a client.
             ITextAnalyticsAPI client = new TextAnalyticsAPI();
             client.AzureRegion = AzureRegions.Westcentralus;
+            //user key is Brent 
             client.SubscriptionKey = "d8646ffcf51c4855a5d348e682b270c0";
 
             List<string> keyPhrases = new List<string>();//output
@@ -148,7 +151,7 @@ namespace AMANDAPI.Controllers
                         }));
 
 
-            // Printing keyphrases
+            // Printing key-phrases
             foreach (var document in result2.Documents)
             {
 
@@ -175,7 +178,5 @@ namespace AMANDAPI.Controllers
 
             return new Models.Analytics() { Keywords = keyPhrases, Sentiment = sentiment };
         }
-    }// Bottom of the v
+    }
 }
-
-    
