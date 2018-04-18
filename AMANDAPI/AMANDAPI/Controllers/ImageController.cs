@@ -64,10 +64,10 @@ namespace AMANDAPI.Controllers
 
                 return valueList.ToList();
             }
-
             //If Bing did not return a result send back an empty list
             return new List<string>();
         }
+
 
         /// <summary>
         /// Main meat of the app
@@ -90,7 +90,9 @@ namespace AMANDAPI.Controllers
             {
                 numRecs = 3;
             }
-            List<string> reccomendations = usesentiment == "true" ? GetURLFromSentiment(float.Parse(data)) : new List<string> { "brent made a mistake", "blame it on brent"};//Bing search results will go here
+
+            IEnumerable<string> reccomendations = usesentiment == "true" ? GetURLFromSentiment(float.Parse(data)) : BingSearch(data).Result;//Bing search results will go here
+
             return reccomendations.Take(numRecs);
         }
 
@@ -154,7 +156,4 @@ namespace AMANDAPI.Controllers
             return View();
         }
     }
-
 }
-
-    
