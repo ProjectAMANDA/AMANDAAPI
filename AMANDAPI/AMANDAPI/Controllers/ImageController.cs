@@ -65,13 +65,15 @@ namespace AMANDAPI.Controllers
 
         //}
 
-        [HttpGet]
+        [HttpGet("{keyword}"})]
         public IEnumerable<string> GetUrls([FromHeader] string text, [FromHeader] string sentiment = "true", [FromHeader] string numRecs = "3" )
         {
             int num;
             try
             {
                 num = int.Parse(numRecs);
+                if (num > 6)
+                    throw new Exception();
             }
             catch
             {
