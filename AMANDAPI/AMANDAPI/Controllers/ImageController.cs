@@ -10,6 +10,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Web;
 using AMANDAPI.Models;
+using Newtonsoft.Json.Linq;
 
 namespace AMANDAPI.Controllers
 {
@@ -31,7 +32,7 @@ namespace AMANDAPI.Controllers
 
         // "[?q][&count][&offset][&mkt][&safeSearch]"
 
-        public async Task<BingJson> BingSearch(string searchQuery)
+        public async Task<JsonBingResult> BingSearch(string searchQuery)
         {
 
             var client = new HttpClient();
@@ -48,21 +49,23 @@ namespace AMANDAPI.Controllers
             queryString["safeSearch"] = "Strict";
             string uri = "https://api.cognitive.microsoft.com/bing/v7.0/images/search?" + queryString;
 
+            
             var response = await client.GetAsync(uri);
             string responseString = await response.Content.ReadAsStringAsync();
             if (responseString != null)
             {
-                return JsonConvert.DeserializeObject<BingJson>(responseString);
+
+
+           
+                var data = JObject.Parse(responseString);
+
+                JsonBingResult returnedvalue = JsonConvert.DeserializeObject<JsonBingResult>(data.ToString());
+
+                
+                
+               // return returnedvalue;
             }
-            return JsonConvert.DeserializeObject<BingJson>(responseString);
-        }
-       
-
-
-        [HttpGet("{sentiment:float}")]
-        public IActionResult Index(float sentiment)
-        {
-
+            return JsonConvert.DeserializeObject<JsonBingResult>(responseString);
         }
 
         [HttpPost]
@@ -84,4 +87,5 @@ namespace AMANDAPI.Controllers
         }
 
     }
+
 }
