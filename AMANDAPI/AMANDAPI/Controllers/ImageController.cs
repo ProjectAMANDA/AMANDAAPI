@@ -68,7 +68,15 @@ namespace AMANDAPI.Controllers
             return new List<string>();
         }
 
-        [HttpGet("{data}/{usesentiment}/{num}")]
+
+        /// <summary>
+        /// Main meat of the app
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="usesentiment"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        [HttpGet("{data}/{usesentiment?}/{num?}")]
         public IEnumerable<string> GetUrls(string data, string usesentiment = "true", string num = "3" )
         {
             int numRecs;
@@ -105,7 +113,11 @@ namespace AMANDAPI.Controllers
             return Images;
         }
 
-
+        /// <summary>
+        /// Removes items from database
+        /// </summary>
+        /// <param name="id">id of image to remove</param>
+        /// <returns>does not matter.</returns>
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -119,9 +131,13 @@ namespace AMANDAPI.Controllers
             _context.Images.Remove(ImageDelete);
             _context.SaveChanges();
             return new NoContentResult();
-
         }
 
+        /// <summary>
+        /// This was used to populate the database.
+        /// </summary>
+        /// <param name="image">Image to add to the database</param>
+        /// <returns>does not matter.</returns>
         [HttpPost]
         public IActionResult Create([FromBody]Image image)
         {
@@ -138,57 +154,6 @@ namespace AMANDAPI.Controllers
         public IActionResult Edit()
         {
             return View();
-        }
-
-        // I'm assuming this model will eventually need
-        // to be moved into the images controller. If so, change to private
-        private Analytics Analyze(string body)
-        {
-            // Create a client.
-            ITextAnalyticsAPI client = new TextAnalyticsAPI();
-            client.AzureRegion = AzureRegions.Westcentralus;
-            client.SubscriptionKey = "d8646ffcf51c4855a5d348e682b270c0";
-
-            List<string> keyPhrases = new List<string>();//output
-            float sentiment = 0;
-
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
-
-            // Getting key-phrases
-
-            KeyPhraseBatchResult result2 = client.KeyPhrases(
-                    new MultiLanguageBatchInput(
-                        new List<MultiLanguageInput>()
-                        {
-                          new MultiLanguageInput("en", "3", body),
-                        }));
-
-
-            // keyphrases
-            foreach (var document in result2.Documents)
-            {
-
-                foreach (string keyphrase in document.KeyPhrases)
-                {
-                    keyPhrases.Add(keyphrase);
-                }
-            }
-
-            // Extracting sentiment
-            SentimentBatchResult result3 = client.Sentiment(
-                    new MultiLanguageBatchInput(
-                        new List<MultiLanguageInput>()
-                        {
-                          new MultiLanguageInput("en", "0", body)
-                        }));
-
-            // sentiment results
-            foreach (var document in result3.Documents)
-            {
-                sentiment = (float)document.Score;
-            }
-
-            return new Analytics() { Keywords = keyPhrases, Sentiment = sentiment };
         }
     }
 }
