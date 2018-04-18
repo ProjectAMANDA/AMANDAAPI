@@ -15,7 +15,6 @@ using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
 
 namespace AMANDAPI.Controllers
 {
-
     [Route("api/image")]
     public class ImageController : Controller
     {
@@ -66,11 +65,22 @@ namespace AMANDAPI.Controllers
 
         //}
 
-        [HttpGet]
-        public IEnumerable<string> GetUrls([FromHeader] string text)
+        [HttpGet("{data}/{usesentiment}/{num}")]
+        public IEnumerable<string> GetUrls(string data, string usesentiment = "true", string num = "3" )
         {
-            Analytics analysis = Analyze(text);
-            return GetURLFromSentiment(analysis.Sentiment);
+            int numRecs;
+            try
+            {
+                numRecs = int.Parse(num);
+                if (numRecs > 6)
+                    throw new Exception();
+            }
+            catch
+            {
+                numRecs = 3;
+            }
+            List<string> reccomendations = usesentiment == "true" ? GetURLFromSentiment(float.Parse(data)) : new List<string> { "brent made a mistake", "blame it on brent"};//Bing search results will go here
+            return reccomendations.Take(numRecs);
         }
 
 
@@ -148,7 +158,7 @@ namespace AMANDAPI.Controllers
                         }));
 
 
-            // Printing keyphrases
+            // keyphrases
             foreach (var document in result2.Documents)
             {
 
@@ -159,7 +169,6 @@ namespace AMANDAPI.Controllers
             }
 
             // Extracting sentiment
-
             SentimentBatchResult result3 = client.Sentiment(
                     new MultiLanguageBatchInput(
                         new List<MultiLanguageInput>()
@@ -167,13 +176,13 @@ namespace AMANDAPI.Controllers
                           new MultiLanguageInput("en", "0", body)
                         }));
 
-            // Printing sentiment results
+            // sentiment results
             foreach (var document in result3.Documents)
             {
                 sentiment = (float)document.Score;
             }
 
-            return new Models.Analytics() { Keywords = keyPhrases, Sentiment = sentiment };
+            return new Analytics() { Keywords = keyPhrases, Sentiment = sentiment };
         }
     }// Bottom of the v
 }
