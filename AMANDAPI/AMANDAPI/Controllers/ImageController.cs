@@ -14,6 +14,7 @@ using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
+using Microsoft.Extensions.Configuration;
 
 
 namespace AMANDAPI.Controllers
@@ -22,13 +23,13 @@ namespace AMANDAPI.Controllers
     public class ImageController : Controller
     {
         private readonly ImagesContext _context;
-        // Bing API key
-        const string accessKey = "26f5d2c5dad8494b867de53f057850c1";
+        private readonly IConfiguration Configuration;
 
         //constructor connecting to the database
-        public ImageController(ImagesContext context)
+        public ImageController(ImagesContext context, IConfiguration configuration)
         {
             _context = context;
+            Configuration = configuration;
         }
         
         /// <summary>
@@ -140,7 +141,8 @@ namespace AMANDAPI.Controllers
             var queryString = HttpUtility.ParseQueryString(string.Empty);
 
             // Set the authentication headers
-            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", accessKey);
+            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", 
+                Configuration["myBingAPIKey"]);
 
             // Request parameters
             queryString["q"] = searchQuery;
