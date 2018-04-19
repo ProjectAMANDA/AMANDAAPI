@@ -39,7 +39,7 @@ namespace AMANDAPI.Controllers
         /// <param name="num"></param>
         /// <returns></returns>
         [HttpGet("{data}/{num?}")]
-        public IEnumerable<Image> GetUrls(string data, int num = 3 )
+        public IActionResult GetUrls(string data, int num = 3 )
         {
             bool usesentiment = false;
             try
@@ -60,7 +60,13 @@ namespace AMANDAPI.Controllers
             IEnumerable<Image> reccomendations = usesentiment ?
                 GetImageBySentiment(sentiment) :
                 BingSearch(data).Result;
-            return reccomendations.Take(num);
+            return new OkObjectResult(new
+            {
+                rec = reccomendations.Take(num),
+                bySeniment = usesentiment,
+                sentim = usesentiment ? sentiment : -1,
+                keyword = usesentiment ? "" : data
+            });
         }
 
 
