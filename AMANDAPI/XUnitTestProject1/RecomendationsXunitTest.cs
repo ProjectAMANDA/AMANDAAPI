@@ -27,7 +27,7 @@ namespace XUnitTestProject1
 
 
 
-        ImagesContext _context;
+        //ImagesContext _context;
         /*
         [Fact]
         public void ModelSentimentTest()

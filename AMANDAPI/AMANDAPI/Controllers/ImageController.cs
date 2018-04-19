@@ -5,15 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AMANDAPI.Data;
 using System.Net.Http;
-using System.Net;
-using System.IO;
-using Newtonsoft.Json;
 using System.Web;
 using AMANDAPI.Models;
 using Newtonsoft.Json.Linq;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
-using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
 using Microsoft.Extensions.Configuration;
 
 

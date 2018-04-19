@@ -3,11 +3,7 @@ using AMANDAPI.Controllers;
 using AMANDAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using AMANDAPI;
-using Microsoft.Extensions.Configuration;
 using Xunit;
 
 namespace ImageControllerTest

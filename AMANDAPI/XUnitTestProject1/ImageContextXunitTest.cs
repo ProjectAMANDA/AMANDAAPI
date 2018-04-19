@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
+﻿using Xunit;
 using AMANDAPI.Data;
 using AMANDAPI.Models;
 using AMANDAPI.Controllers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using AMANDAPI;
 
 namespace XUnitTestProject1
 {
@@ -25,7 +23,7 @@ namespace XUnitTestProject1
             builder.AddUserSecrets<Startup>();
             var Configuration = builder.Build();
 
-            Configuration = Configuration;
+            //Configuration = Configuration;
 
             using (var context = new ImagesContext(Option))
             {
@@ -54,10 +52,6 @@ namespace XUnitTestProject1
 
                 Assert.Equal(image.URL, temp.URL);
             }
-
-
-
-
 
         }
     }

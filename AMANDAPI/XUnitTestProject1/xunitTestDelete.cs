@@ -7,6 +7,8 @@ using AMANDAPI.Models;
 using AMANDAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.CodeAnalysis.Options;
+using AMANDAPI;
+using Microsoft.Extensions.Configuration;
 
 namespace XUnitTestProject1
 {
@@ -20,12 +22,16 @@ namespace XUnitTestProject1
                 .UseInMemoryDatabase(databaseName: "testingDb")
                 .Options;
 
+            var builder = new ConfigurationBuilder();
+            builder.AddUserSecrets<Startup>();
+            var Configuration = builder.Build();
+
 
             using (var context = new ImagesContext(Option))
             {
                 //arrange
 
-                var controller = new ImageController(context);
+                var controller = new ImageController(context, Configuration);
                 Image image = new Image();
                 image.Sentiment = .1333f;
                 image.URL = "https://assets.pokemon.com/assets//cms2/img/play-games/_tiles/alolan_volcanic_panic/alolan-volcanic-panic-169.jpg";
