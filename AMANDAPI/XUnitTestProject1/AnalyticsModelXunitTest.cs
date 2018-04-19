@@ -10,6 +10,8 @@ namespace XUnitTestProject1
 {
     public class ModelSentimentTest
     {
+
+        /*This really tests the image model */
         ImagesContext _context;
 
         public ModelSentimentTest()

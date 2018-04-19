@@ -67,21 +67,5 @@ namespace XUnitTestProject1
             Assert.Equal("Happy", testPhrase.KeyPhrase);
         }
 
-
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
