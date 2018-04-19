@@ -7,7 +7,6 @@ using AMANDAPI.Models;
 using AMANDAPI.Controllers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using AMANDAPI;
 
 namespace XUnitTestProject1
 {
@@ -16,12 +15,17 @@ namespace XUnitTestProject1
         [Fact]
         public void TestImageCollector()
         {
-            var Option = new DbContextOptionsBuilder<ImagesContext>()
+            //private readonly IConfiguration Configuration;
+
+        var Option = new DbContextOptionsBuilder<ImagesContext>()
                 .UseInMemoryDatabase(databaseName: "testingDb")
                 .Options;
+          
             var builder = new ConfigurationBuilder();
             builder.AddUserSecrets<Startup>();
             var Configuration = builder.Build();
+
+            Configuration = Configuration;
 
             using (var context = new ImagesContext(Option))
             {
@@ -50,14 +54,6 @@ namespace XUnitTestProject1
 
                 Assert.Equal(image.URL, temp.URL);
             }
-
-
-
-
-
-
-
-
 
 
 
