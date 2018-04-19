@@ -20,13 +20,16 @@ namespace XUnitTestProject1
         var Option = new DbContextOptionsBuilder<ImagesContext>()
                 .UseInMemoryDatabase(databaseName: "testingDb")
                 .Options;
+          
+            var builder = new ConfigurationBuilder();
+            builder.AddUserSecrets<Startup>();
+            var Configuration = builder.Build();
 
             Configuration = Configuration;
 
-
             using (var context = new ImagesContext(Option))
             {
-                var controller = new ImageController(context);
+                var controller = new ImageController(context, Configuration);
                 Image image = new Image();
                 image.Sentiment = .1333f;
                 image.URL = "https://assets.pokemon.com/assets//cms2/img/play-games/_tiles/alolan_volcanic_panic/alolan-volcanic-panic-169.jpg";
@@ -51,14 +54,6 @@ namespace XUnitTestProject1
 
                 Assert.Equal(image.URL, temp.URL);
             }
-
-
-
-
-
-
-
-
 
 
 
