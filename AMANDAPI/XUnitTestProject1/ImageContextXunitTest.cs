@@ -11,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using System.Collections;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace XUnitTestProject1
 {
     public class ImageContextXunitTest
@@ -22,10 +21,6 @@ namespace XUnitTestProject1
             var options = new DbContextOptionsBuilder<ImagesContext>()
                 .UseInMemoryDatabase(databaseName: "testDb")
                 .Options;
-          
-            var builder = new ConfigurationBuilder();
-            builder.AddUserSecrets<Startup>();
-            var Configuration = builder.Build();
 
             var builder = new ConfigurationBuilder().AddEnvironmentVariables();
             builder.AddUserSecrets<Startup>();

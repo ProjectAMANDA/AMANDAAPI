@@ -4,11 +4,7 @@ using AMANDAPI.Data;
 using AMANDAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using AMANDAPI;
-using Microsoft.Extensions.Configuration;
 using Xunit;
 using Microsoft.AspNetCore.Mvc;
 

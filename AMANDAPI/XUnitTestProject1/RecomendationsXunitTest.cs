@@ -11,8 +11,10 @@ namespace XUnitTestProject1
 {
    public class RecomendationsXunitTest
    {
+
+        // Testing Models.Recomndations.UseSentiment(true)
         [Fact]
-        public void ImgesSet()
+        public void ImgesSetReturnsBoolTrue()
         {
             //arrage
             Reccommendations fc = new Reccommendations
@@ -24,50 +26,46 @@ namespace XUnitTestProject1
             Assert.True(fc.UseSentiment);
         }
 
-
-
-
-        ImagesContext _context;
-        /*
-        [Fact]
-        public void ModelSentimentTest()
+        // Testing Models.Recomndations.UseSentiment(false)
+       [Fact]
+        public void ImgesSetReturnsBoolFalse()
         {
-            DbContextOptions<ImagesContext> options = new DbContextOptionsBuilder<ImagesContext>()
-              .UseInMemoryDatabase(Guid.NewGuid().ToString())
-              .Options;
-            _context = new ImagesContext(options);
-        }*/
-
-        /*
-        [Fact]
-        public void GetSentimentFromRecs()
-        {
-            Image testingSentiment = new Reccommendations()
+            //arrage
+            Reccommendations fc = new Reccommendations
             {
-                UseSentiment = true,
-                Sentiment = 0.65f,
-                KeyPhrase = "happy",
+                UseSentiment = false
             };
 
-            Assert.Equal(0.65f)
-
-
+            //assert
+            Assert.False(fc.UseSentiment);
         }
-        */
 
-           
+        // Testing Models.Recomndations.Sentiment(float)
+        [Fact]
+        public void UseSentiment()
+        {
+            //arrange
+            Reccommendations Img = new Reccommendations
+            {
+                Sentiment = .01f
+            };
 
+            //assert
+            Assert.Equal(.01f, Img.Sentiment);
+        }
 
+        [Fact]
+        public void UseKeyPhrase()
+        {
+            //arrange
+            Reccommendations testPhrase = new Reccommendations
+            {
+                KeyPhrase = "Happy"
+            };
 
-
-
-
-
-
-
-        
-
-
+            //assert
+            Assert.Equal("Happy", testPhrase.KeyPhrase);
+        }
 
     }
 }
