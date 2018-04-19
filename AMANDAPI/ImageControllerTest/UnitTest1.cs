@@ -1,10 +1,12 @@
 using AMANDAPI;
 using AMANDAPI.Controllers;
 using AMANDAPI.Data;
+using AMANDAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Collections;
 using Xunit;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ImageControllerTest
 {
@@ -52,10 +54,60 @@ namespace ImageControllerTest
 
 
                 //Act
-                //var results = controller.GetUrls("cats", "False", "3");
+                var results = controller.GetUrls("cats", 3);
 
                 //Assert
-               // Assert.IsAssignableFrom<IEnumerable>(results);
+                Assert.IsType<OkObjectResult>(results);
+            }
+        }
+
+        [Fact]
+        public void CanCreateDBEntry()
+        {
+            var options = new DbContextOptionsBuilder<ImagesContext>()
+                .UseInMemoryDatabase(databaseName: "testDb")
+                .Options;
+
+            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
+            builder.AddUserSecrets<Startup>();
+            var configuration = builder.Build();
+
+            using (var context = new ImagesContext(options))
+            {
+                var controller = new ImageController(context, configuration);
+
+                //Act
+                controller.Create(new Image() { URL = "test Url"});
+                Image testImage = context.Images.
+                                FirstOrDefaultAsync(test => test.URL == "test Url").Result;
+
+                //Assert
+                Assert.Equal("test Url", testImage.URL);
+            }
+        }
+
+        [Fact]
+        public void CanDeleteDBEntry()
+        {
+            var options = new DbContextOptionsBuilder<ImagesContext>()
+                .UseInMemoryDatabase(databaseName: "testDb")
+                .Options;
+
+            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
+            builder.AddUserSecrets<Startup>();
+            var configuration = builder.Build();
+
+            using (var context = new ImagesContext(options))
+            {
+                var controller = new ImageController(context, configuration);
+
+                //Act
+                controller.Create(new Image() { URL = "test Url" });
+                Image testImage = context.Images.
+                                FirstOrDefaultAsync(test => test.URL == "test Url").Result;
+
+                //Assert
+                Assert.IsType<NoContentResult>(controller.Delete(testImage.Id));
             }
         }
     }
