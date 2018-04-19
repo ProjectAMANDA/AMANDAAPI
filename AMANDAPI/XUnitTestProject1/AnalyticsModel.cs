@@ -13,6 +13,7 @@ namespace XUnitTestProjectModels
     //Testing Models.Analytics
     public class AnalyticsModel
     {
+        // Testing Models.Analytics Property Sentiment Value
         [Fact]
         public void canFloatSentimentAnalytics()
         {
@@ -26,6 +27,7 @@ namespace XUnitTestProjectModels
             Assert.Equal(.01f, pc.Sentiment);
         }
 
+        // Testing Models.Analytics Property KeyWords
         [Fact]
         public void AnalyticsKeywords()
         {
