@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using AMANDAPI;
+using Microsoft.Extensions.Configuration;
 using Xunit;
 
 namespace ImageControllerTest
@@ -16,9 +18,14 @@ namespace ImageControllerTest
             var options = new DbContextOptionsBuilder<ImagesContext>()
                 .UseInMemoryDatabase(databaseName: "testDb")
                 .Options;
+
+            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
+            builder.AddUserSecrets<Startup>();
+            var configuration = builder.Build();
+
             using (var context = new ImagesContext(options))
             {
-                var controller = new ImageController(context);
+                var controller = new ImageController(context, configuration);
 
                 //Act
                 var results = await controller.BingSearch("cats");
@@ -34,9 +41,14 @@ namespace ImageControllerTest
             var options = new DbContextOptionsBuilder<ImagesContext>()
                 .UseInMemoryDatabase(databaseName: "testDb")
                 .Options;
+
+            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
+            builder.AddUserSecrets<Startup>();
+            var configuration = builder.Build();
+
             using (var context = new ImagesContext(options))
             {
-                var controller = new ImageController(context);
+                var controller = new ImageController(context, configuration);
 
                 //Act
                 //var results = controller.GetUrls("cats", "False", "3");
