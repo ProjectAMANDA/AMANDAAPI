@@ -1,7 +1,9 @@
+using AMANDAPI;
 using AMANDAPI.Controllers;
 using AMANDAPI.Data;
 using AMANDAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,6 +23,7 @@ namespace ImageControllerTest
                 .UseInMemoryDatabase(databaseName: "testDb")
                 .Options;
 
+
             var builder = new ConfigurationBuilder().AddEnvironmentVariables();
             builder.AddUserSecrets<Startup>();
             var configuration = builder.Build();
@@ -28,6 +31,7 @@ namespace ImageControllerTest
             using (var context = new ImagesContext(options))
             {
                 var controller = new ImageController(context, configuration);
+
 
                 //Act
                 var results = await controller.BingSearch("cats");
@@ -51,6 +55,7 @@ namespace ImageControllerTest
             using (var context = new ImagesContext(options))
             {
                 var controller = new ImageController(context, configuration);
+
 
                 //Act
                 var results = controller.GetUrls("cats", 3);

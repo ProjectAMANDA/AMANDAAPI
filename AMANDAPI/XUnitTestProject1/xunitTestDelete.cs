@@ -12,36 +12,63 @@ namespace XUnitTestProject1
 {
     public class xunitTestDelete
     {
-        /*
+
         [Fact]
-        public void TestDeleteMethod()
+        public void TestImageCollector()
         {
-            var Options = new DbContextOptionsBuilder<ImagesContext>()
-                .UseInMemoryDatabase(databaseName: "testing_database")
+            var Option = new DbContextOptionsBuilder<ImagesContext>()
+                .UseInMemoryDatabase(databaseName: "testingDb")
                 .Options;
+
 
             using (var context = new ImagesContext(Option))
             {
-                //
+                //arrange
+
                 var controller = new ImageController(context);
                 Image image = new Image();
-                image.Id = 1;
-                image.Sentiment = .40f;
-                image.URL = "https://www.purina.com/sites/g/files/auxxlc196/files/HOUND_Beagle-%2813inch%29.jpg";
+                image.Sentiment = .1333f;
+                image.URL = "https://assets.pokemon.com/assets//cms2/img/play-games/_tiles/alolan_volcanic_panic/alolan-volcanic-panic-169.jpg";
 
                 context.Images.Add(image);
                 context.SaveChanges();
 
-                //act
-                var results = controller.Delete("https://www.purina.com/sites/g/files/auxxlc196/files/HOUND_Beagle-%2813inch%29.jpg");
-            
+                var result = controller.GenerateRecs(".1333", 1).Images;
+                Image temp = new Image()
+                {
+                    Id = 1,
+                    URL = "",
+                    Sentiment = 1,
+                };
 
+                foreach (var item in result)
+                {
+                    temp = item;                    
+                }
+
+
+                //Not removing at this point, need to movie id =1 
+               // var DeleteResult = controller.Delete(temp.Id);
+                var tc = result;
+
+                var RemoveResult = controller.Delete(1);
+
+                /*var result2 = controller.GenerateRecs(".1333", 1).Images;
+
+                foreach (var item in result2)
+                {
+                    temp = item;
+                }
+                */
+
+                var DeleteResult = controller.Delete(temp.Id);
+
+                Assert.NotEqual(temp, image);
             }
 
+
+
+
         }
-        */
-
-
-
     }
 }
