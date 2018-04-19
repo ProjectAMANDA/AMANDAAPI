@@ -30,44 +30,7 @@ namespace AMANDAPI.Controllers
         {
             _context = context;
         }
-
-        public async Task<IEnumerable<Image>> BingSearch(string searchQuery)
-        {
-            var client = new HttpClient();
-            //Create our query string dictionary starting with an empty string
-            var queryString = HttpUtility.ParseQueryString(string.Empty);
-
-            // Set the authentication headers
-            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", accessKey);
-
-            // Request parameters
-            queryString["q"] = searchQuery;
-            queryString["count"] = "15";
-            queryString["offset"] = "0";
-            queryString["mkt"] = "en-us";
-            queryString["safeSearch"] = "Strict";
-            // Build the query string
-            string uri = "https://api.cognitive.microsoft.com/bing/v7.0/images/search?" + queryString;
-            // Make the call to Bing Image Search API
-            var response = await client.GetAsync(uri);
-            // Pull a string out of the response body
-            string responseString = await response.Content.ReadAsStringAsync();
-            // CHeck if we got something back from Bing
-            if (responseString != null)
-            {
-                //Parse just the JSON we care about into a JObject
-                var data = JObject.Parse(responseString)["value"];
-                //Pull the list of thumbnail URLs
-                IEnumerable<Image> valueList = from JObject n 
-                                                in data
-                                                select new Image(n["thumbnailUrl"].ToString());
-                return valueList.ToList();
-            }
-            //If Bing did not return a result send back an empty list
-            return new List<Image>();
-        }
-
-
+        
         /// <summary>
         /// Main meat of the app
         /// </summary>
@@ -89,7 +52,7 @@ namespace AMANDAPI.Controllers
                 num = 3;
             }
             float sentiment = 0;
-            if (!float.TryParse(data, out sentiment))
+            if (float.TryParse(data, out sentiment))
             {
                 usesentiment = true;
             }
@@ -156,6 +119,42 @@ namespace AMANDAPI.Controllers
         public IActionResult Edit()
         {
             return View();
+        }
+
+        public async Task<IEnumerable<Image>> BingSearch(string searchQuery)
+        {
+            var client = new HttpClient();
+            //Create our query string dictionary starting with an empty string
+            var queryString = HttpUtility.ParseQueryString(string.Empty);
+
+            // Set the authentication headers
+            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", accessKey);
+
+            // Request parameters
+            queryString["q"] = searchQuery;
+            queryString["count"] = "15";
+            queryString["offset"] = "0";
+            queryString["mkt"] = "en-us";
+            queryString["safeSearch"] = "Strict";
+            // Build the query string
+            string uri = "https://api.cognitive.microsoft.com/bing/v7.0/images/search?" + queryString;
+            // Make the call to Bing Image Search API
+            var response = await client.GetAsync(uri);
+            // Pull a string out of the response body
+            string responseString = await response.Content.ReadAsStringAsync();
+            // CHeck if we got something back from Bing
+            if (responseString != null)
+            {
+                //Parse just the JSON we care about into a JObject
+                var data = JObject.Parse(responseString)["value"];
+                //Pull the list of thumbnail URLs
+                IEnumerable<Image> valueList = from JObject n
+                                                in data
+                                               select new Image(n["thumbnailUrl"].ToString());
+                return valueList.ToList();
+            }
+            //If Bing did not return a result send back an empty list
+            return new List<Image>();
         }
     }
 }
