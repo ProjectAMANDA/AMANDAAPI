@@ -13,6 +13,7 @@ using AMANDAPI.Models;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 
 namespace AMANDAPI.Controllers
 {
@@ -24,6 +25,13 @@ namespace AMANDAPI.Controllers
 
     public class AnalyticsController : Controller
     {
+        private readonly IConfiguration Configuration;
+        //Pull in config API for user secrets
+        public AnalyticsController(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         /// <summary>
         /// This action will analyze text for sentiment and keywords and then redirect to our image suggestion enpoint.
         /// If you don't specify to use sentiment or number of pictures to recieve, it defaults to 3.
@@ -51,7 +59,7 @@ namespace AMANDAPI.Controllers
             ITextAnalyticsAPI client = new TextAnalyticsAPI();
             client.AzureRegion = AzureRegions.Westcentralus;
             //user key is Brent 
-            client.SubscriptionKey = "d8646ffcf51c4855a5d348e682b270c0";
+            client.SubscriptionKey = Configuration["textAPIKey"];
 
             List<string> keyPhrases = new List<string>();//output
             float sentiment = 0;
