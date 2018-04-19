@@ -6,6 +6,7 @@ using AMANDAPI.Data;
 using AMANDAPI.Models;
 using AMANDAPI.Controllers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace XUnitTestProject1
 {
@@ -14,9 +15,13 @@ namespace XUnitTestProject1
         [Fact]
         public void TestImageCollector()
         {
-            var Option = new DbContextOptionsBuilder<ImagesContext>()
+            //private readonly IConfiguration Configuration;
+
+        var Option = new DbContextOptionsBuilder<ImagesContext>()
                 .UseInMemoryDatabase(databaseName: "testingDb")
                 .Options;
+
+            Configuration = Configuration;
 
 
             using (var context = new ImagesContext(Option))
