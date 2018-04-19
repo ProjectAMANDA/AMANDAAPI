@@ -26,13 +26,13 @@ namespace XUnitTestProject1
                 var controller = new ImageController (context);
 
                 Image image = new Image();
-                image.Sentiment = ".301";
+                image.Sentiment = .30f;
                 image.URL = "https://www.purina.com/sites/g/files/auxxlc196/files/HOUND_Beagle-%2813inch%29.jpg";
 
                 context.Images.Add(image);
                 context.SaveChanges();
                 //act
-                var result = controller.GetUrls(".314", "true", "1");
+                var result = controller.GetUrls("true", 1);
                 string temp = "";
                 foreach (var item in result)
                 {
