@@ -41,6 +41,11 @@ namespace AMANDAPI.Controllers
         [HttpGet("{data}/{num?}")]
         public IActionResult GetUrls(string data, int num = 3 )
         {
+            return  new OkObjectResult(GenerateRecs(data, num));
+        }
+
+        public Reccommendations GenerateRecs(string data, int num)
+        {
             bool usesentiment = false;
             try
             {
@@ -60,21 +65,22 @@ namespace AMANDAPI.Controllers
             IEnumerable<Image> reccomendations = usesentiment ?
                 GetImageBySentiment(sentiment) :
                 BingSearch(data).Result;
-            return new OkObjectResult(new
+            Reccommendations rec = new Reccommendations()
             {
-                rec = reccomendations.Take(num),
-                bySeniment = usesentiment,
-                sentim = usesentiment ? sentiment : -1,
-                keyword = usesentiment ? "" : data
-            });
+                Images = reccomendations.Take(num),
+                UseSentiment = usesentiment,
+                Sentiment = usesentiment ? sentiment : -1,
+                KeyPhrase = usesentiment ? "" : data
+            };
+            return rec;
         }
 
 
-        //[HttpGet("{sentiment}")]
-        /*GetURLFromSentiment this method is being called to create a generics list of images using a LINQ that we
-         * pass in the sentiment and match it against our database of cat images.
-       */
-        public List<Image> GetImageBySentiment(float sentiment)
+            //[HttpGet("{sentiment}")]
+            /*GetURLFromSentiment this method is being called to create a generics list of images using a LINQ that we
+             * pass in the sentiment and match it against our database of cat images.
+           */
+            public List<Image> GetImageBySentiment(float sentiment)
         {
             List<Image> Images = _context.Images
                                         // comparing an image list by the image sentiment to target sentiment
