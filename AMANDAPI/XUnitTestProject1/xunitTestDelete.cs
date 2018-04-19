@@ -12,6 +12,7 @@ namespace XUnitTestProject1
 {
     public class xunitTestDelete
     {
+        /*
         [Fact]
         public void TestDeleteMethod()
         {
@@ -35,14 +36,10 @@ namespace XUnitTestProject1
                 var results = controller.Delete("https://www.purina.com/sites/g/files/auxxlc196/files/HOUND_Beagle-%2813inch%29.jpg");
             
 
-
-
-
-
             }
 
         }
-
+        */
 
 
 

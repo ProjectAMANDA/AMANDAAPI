@@ -23,15 +23,19 @@ namespace XUnitTestProject1
             {
                 var controller = new ImageController(context);
                 Image image = new Image();
-                image.Sentiment = .1f;
+                image.Sentiment = .1333f;
                 image.URL = "https://assets.pokemon.com/assets//cms2/img/play-games/_tiles/alolan_volcanic_panic/alolan-volcanic-panic-169.jpg";
 
                 context.Images.Add(image);
                 context.SaveChanges();
 
-                var result = controller.GetUrls("true", 1);
-                /*
-                string temp = " ";
+                var result = controller.GenerateRecs(".1333", 1).Images;
+
+                Image temp = new Image()
+                {
+                    URL = "",
+                    Sentiment = 1
+                };
 
                 foreach (var item in result)
                 {
@@ -39,10 +43,9 @@ namespace XUnitTestProject1
                 }
 
                 var tc = result;
-                */
-                Assert.Equal(image.URL, temp);
-            }
 
+                Assert.Equal(image.URL, temp.URL);
+            }
 
 
 
