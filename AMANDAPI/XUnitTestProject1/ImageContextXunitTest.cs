@@ -40,16 +40,21 @@ namespace XUnitTestProject1
                 var tc = result;
 
                 Assert.Equal(image.URL, temp);
-
-
-
             }
 
 
 
 
+
+
+
+
+
+
+
+
+
+
         }
-
-
     }
 }
