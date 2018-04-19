@@ -69,8 +69,6 @@ namespace AMANDAPI.Controllers
                     data = sentiment.ToString();
                 }
             }
-
-
             IEnumerable<Image> reccomendations = usesentiment ?
                 GetImageBySentiment(sentiment) :
                 BingSearch(data).Result;
@@ -84,18 +82,13 @@ namespace AMANDAPI.Controllers
             return rec;
         }
 
-
-            //[HttpGet("{sentiment}")]
-            /*GetURLFromSentiment this method is being called to create a generics list of images using a LINQ that we
-             * pass in the sentiment and match it against our database of cat images.
-           */
-            public List<Image> GetImageBySentiment(float sentiment)
+        public List<Image> GetImageBySentiment(float sentiment)
         {
+            // comparing an image list by the image sentiment to target sentiment
             List<Image> Images = _context.Images
-                                        // comparing an image list by the image sentiment to target sentiment
-                                        .OrderBy(i => Math.Abs(i.Sentiment - sentiment))
-                                        // setting to list
-                                        .ToList();
+                                .OrderBy(i => Math.Abs(i.Sentiment - sentiment))
+                                // setting to list
+                                .ToList();
             return Images;
         }
 
