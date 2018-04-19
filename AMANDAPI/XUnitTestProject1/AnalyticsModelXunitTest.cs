@@ -25,10 +25,10 @@ namespace XUnitTestProject1
         {
             Image testSentiment = new Image()
             {
-                Sentiment = "0.943"
+                Sentiment = 0.94f
             };
 
-            Assert.Equal("0.943", testSentiment.Sentiment);
+            Assert.Equal(0.94f, testSentiment.Sentiment);
         }
 
 

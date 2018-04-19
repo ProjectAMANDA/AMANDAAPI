@@ -26,10 +26,11 @@ namespace XUnitTestProject1
         {
             Image testSentiment = new Image()
             {
-                Sentiment = "0.943"
+                URL ="https://www.purina.com/sites/g/files/auxxlc196/files/HOUND_Beagle-%2813inch%29.jpg",
+                Sentiment = 0f
             };
 
-            Assert.Equal("0.943", testSentiment.Sentiment);
+            Assert.Equal(0f, testSentiment.Sentiment);
         }
 
         [Fact]

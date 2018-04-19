@@ -42,7 +42,8 @@ namespace AMANDAPI.Controllers
             {
                 data = analysis.Sentiment.ToString();
             }
-            return RedirectToAction("GetUrls", "Image", new { data, usesentiment, num });
+            
+            return RedirectToAction("GetUrls", "Image", new { data, num });
         }
         private Analytics Analyze(string body)
         {
