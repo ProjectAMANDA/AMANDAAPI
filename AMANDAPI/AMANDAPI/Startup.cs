@@ -18,7 +18,7 @@ namespace AMANDAPI
 
         public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder();
+            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
             builder.AddUserSecrets<Startup>();
             Configuration = builder.Build();
         }
