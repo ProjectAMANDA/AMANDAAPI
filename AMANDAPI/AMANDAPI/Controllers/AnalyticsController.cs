@@ -26,20 +26,20 @@ namespace AMANDAPI.Controllers
     public class AnalyticsController : Controller
     {
         private readonly IConfiguration Configuration;
-        //Pull in config API for user secrets
+        //Pull in configure API for user secrets
         public AnalyticsController(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
         /// <summary>
-        /// This action will analyze text for sentiment and keywords and then redirect to our image suggestion enpoint.
-        /// If you don't specify to use sentiment or number of pictures to recieve, it defaults to 3.
+        /// This action will analyze text for sentiment and keywords and then redirect to our image suggestion endpoint.
+        /// If you don't specify to use sentiment or number of pictures to receive, it defaults to 3.
         /// </summary>
         /// <param name="text">Text to be analyzed</param>
         /// <param name="usesentiment">Optional. "true" to use sentiment. Anything else will use keywords. Defaults to true</param>
         /// <param name="num">Optional. number of images to be retrieved. Defaults to 3.</param>
-        /// <returns>redirect to get urls from image suggestion.</returns>
+        /// <returns>redirect to get URL from image suggestion.</returns>
         [HttpGet("{usesentiment?}/{num?}")]
         public IActionResult GetText([FromHeader]string text, string usesentiment = "true", string num = "3")
         {
@@ -58,7 +58,7 @@ namespace AMANDAPI.Controllers
             // Create a client.
             ITextAnalyticsAPI client = new TextAnalyticsAPI();
             client.AzureRegion = AzureRegions.Westcentralus;
-            //user key is Brent 
+           
             client.SubscriptionKey = Configuration["textAPIKey"];
 
             List<string> keyPhrases = new List<string>();//output
@@ -98,7 +98,7 @@ namespace AMANDAPI.Controllers
                 sentiment = (float)document.Score;
             }
 
-            // Repack analysic into analytics object for use elsewhere.
+            // Repack analytic into analytics object for use elsewhere.
             return new Analytics() { Keywords = keyPhrases, Sentiment = sentiment };
         }
 
