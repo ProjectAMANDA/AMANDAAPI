@@ -23,6 +23,7 @@ namespace XUnitTestProject1
     public class AnalyticsControllerXunitTest
     {
         // This tests the Analyze method
+        /*
         [Fact]
         public async void AnalyticsControllerXunitTest01()
         {
@@ -44,9 +45,9 @@ namespace XUnitTestProject1
                 //Assert
                 Assert.IsType<Analytics>(results);
             }
-        }
+        }*/
 
-
+        
         [Fact]
         public async void AnalyticsControllerXunitTest02()
         {
@@ -69,6 +70,33 @@ namespace XUnitTestProject1
                 Assert.IsNotType<Analytics>(results);
             }
         }
+        
+
+        /*
+        [Fact]
+        public async void AnalyticsControllerTest()
+        {
+            var options = new DbContextOptionsBuilder<ImagesContext>()
+                .UseInMemoryDatabase(databaseName: "testDb")
+                .Options;
+
+            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
+            builder.AddUserSecrets<Startup>();
+            var configuration = builder.Build();
+
+            using (var context = new ImagesContext(options))
+            {
+                var controller = new AnalyticsController(context, configuration);
+
+                //Act
+                var results = controller.("keyphrases");
+                var results.
+
+                //Assert
+                Assert.IsNotType<Analytics>(results);
+            }
+        }*/
+
 
 
     }

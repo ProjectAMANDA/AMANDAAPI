@@ -55,7 +55,7 @@ namespace AMANDAPI.Controllers
             
             return RedirectToAction("GetUrls", "Image", new { data, num });
         }
-        public Analytics Analyze(string body)
+        private Analytics Analyze(string body)
         {
             // Create a client.
             ITextAnalyticsAPI client = new TextAnalyticsAPI();
