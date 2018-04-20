@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace XUnitTestProject1
 {
+    /*This is testing the */
+
     public class ImageContextXunitTest
     {
         [Fact]
@@ -21,7 +23,7 @@ namespace XUnitTestProject1
             var options = new DbContextOptionsBuilder<ImagesContext>()
                 .UseInMemoryDatabase(databaseName: "testDb")
                 .Options;
-
+            
             var builder = new ConfigurationBuilder().AddEnvironmentVariables();
             builder.AddUserSecrets<Startup>();
             var configuration = builder.Build();

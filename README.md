@@ -1,7 +1,8 @@
 
 # Project AMANDA API
+Acquiring Media And Nascient Data API
 -----
-**Authors**:
+**Authors**:<br>
 Kevin Farrow <br>
 Brent Williams <br>
 Tiger Hsu <br>
@@ -53,9 +54,6 @@ Alternatively, if you have done your own analytics and just want to consume our 
     "keyword": "high code coverage"
 }
 ```
-
-## Json Example
------
 
 ## Frameworks & Dependencies
 -----

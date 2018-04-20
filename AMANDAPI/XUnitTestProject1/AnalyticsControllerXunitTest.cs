@@ -1,0 +1,50 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using AMANDAPI.Models;
+using AMANDAPI.Data;
+using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
+using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
+using Microsoft.AspNetCore.Routing;
+using AMANDAPI.Controllers;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+using Xunit;
+using AMANDAPI;
+using System.Collections;
+
+namespace XUnitTestProject1
+{
+  
+    public class AnalyticsControllerXunitTest
+    {
+        // This tests the Analyze method hits the GetText ; and part of the analytics.Analyze
+    
+        [Fact]
+        public async void AnalyticsControllerXunitGetText()
+        {
+            var options = new DbContextOptionsBuilder<ImagesContext>()
+                .UseInMemoryDatabase(databaseName: "testDb")
+                .Options;
+
+            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
+            builder.AddUserSecrets<Startup>();
+            var configuration = builder.Build();
+
+            using (var context = new ImagesContext(options))
+            {
+                var controller = new AnalyticsController(context, configuration);
+
+                //Act
+                var results = controller.GetText("true");
+
+                //Assert
+                Assert.IsNotType<Analytics>(results);
+            }
+        }
+        
+
+    }
+}
