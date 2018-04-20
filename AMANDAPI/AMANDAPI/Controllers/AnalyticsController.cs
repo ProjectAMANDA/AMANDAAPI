@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using AMANDAPI.Data;
-using System.Net.Http;
-using System.Net;
-using System.IO;
-using Newtonsoft.Json;
-using System.Web;
 using AMANDAPI.Models;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
+using AMANDAPI.Data;
 
 namespace AMANDAPI.Controllers
 {
@@ -26,9 +20,17 @@ namespace AMANDAPI.Controllers
     public class AnalyticsController : Controller
     {
         private readonly IConfiguration Configuration;
+        private ImagesContext context;
+
         //Pull in configure API for user secrets
         public AnalyticsController(IConfiguration configuration)
         {
+            Configuration = configuration;
+        }
+
+        public AnalyticsController(ImagesContext context, IConfigurationRoot configuration)
+        {
+            this.context = context;
             Configuration = configuration;
         }
 
@@ -53,7 +55,7 @@ namespace AMANDAPI.Controllers
             
             return RedirectToAction("GetUrls", "Image", new { data, num });
         }
-        private Analytics Analyze(string body)
+        public Analytics Analyze(string body)
         {
             // Create a client.
             ITextAnalyticsAPI client = new TextAnalyticsAPI();
