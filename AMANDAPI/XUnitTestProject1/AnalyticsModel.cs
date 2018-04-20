@@ -17,7 +17,7 @@ namespace XUnitTestProjectModels
         [Fact]
         public void canFloatSentimentAnalytics()
         {
-            //arrrange
+            //arrange
             Analytics pc = new Analytics
             {
                 Sentiment = .01f

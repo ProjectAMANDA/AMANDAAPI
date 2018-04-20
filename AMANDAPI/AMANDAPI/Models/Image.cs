@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AMANDAPI.Models
 {
-    /*
+    /*This is creating a Image Class which has the properties of Id(num), URL(bing.com), and Sentiment(.09f)
      * 
      */
 
