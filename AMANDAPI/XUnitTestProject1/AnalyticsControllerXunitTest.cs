@@ -18,10 +18,11 @@ using System.Collections;
 namespace XUnitTestProject1
 {
     //needs to touch Analyze string
-    // needs to touch Anaytics controller
+    // needs to touch Analytics controller
     // needs to touch get text 
     public class AnalyticsControllerXunitTest
     {
+        // This tests the Analyze method
         [Fact]
         public async void AnalyticsControllerXunitTest01()
         {
@@ -40,13 +41,35 @@ namespace XUnitTestProject1
                 //Act
                 var results = controller.Analyze("Little Baby foo foo");
 
-
                 //Assert
                 Assert.IsType<Analytics>(results);
-
             }
-
-
         }
+
+
+        [Fact]
+        public async void AnalyticsControllerXunitTest02()
+        {
+            var options = new DbContextOptionsBuilder<ImagesContext>()
+                .UseInMemoryDatabase(databaseName: "testDb")
+                .Options;
+
+            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
+            builder.AddUserSecrets<Startup>();
+            var configuration = builder.Build();
+
+            using (var context = new ImagesContext(options))
+            {
+                var controller = new AnalyticsController(context, configuration);
+
+                //Act
+                var results = controller.GetText("true");
+
+                //Assert
+                Assert.IsNotType<Analytics>(results);
+            }
+        }
+
+
     }
 }
