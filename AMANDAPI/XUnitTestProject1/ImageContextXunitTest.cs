@@ -16,7 +16,7 @@ namespace XUnitTestProject1
     public class ImageContextXunitTest
     {
         [Fact]
-        public async void CanReturnJsonObjectAsync()
+        public async void CanReturnBingSearch()
         {
             var options = new DbContextOptionsBuilder<ImagesContext>()
                 .UseInMemoryDatabase(databaseName: "testDb")
@@ -38,8 +38,12 @@ namespace XUnitTestProject1
             }
         }
 
-        [Fact]
-        public void CanConsumeBingSearch()
+        [Theory]
+        [InlineData("cats", 3)]
+        [InlineData("0.5", 3)]
+        [InlineData("cats", 9)]
+        [InlineData("0.5", -1)]
+        public void CanGenerateURLs( string query, int numResults)
         {
             var options = new DbContextOptionsBuilder<ImagesContext>()
                 .UseInMemoryDatabase(databaseName: "testDb")
@@ -54,13 +58,14 @@ namespace XUnitTestProject1
                 var controller = new ImageController(context, configuration);
 
                 //Act
-                var results = controller.GetUrls("cats", 3);
+                var results = controller.GetUrls(query, numResults);
 
                 //Assert
                 Assert.IsType<OkObjectResult>(results);
             }
         }
 
+        // Create tests
         [Fact]
         public void CanCreateDBEntry()
         {
@@ -86,6 +91,25 @@ namespace XUnitTestProject1
         }
 
         [Fact]
+        public void FailDBEntry()
+        {
+            var options = new DbContextOptionsBuilder<ImagesContext>()
+                .UseInMemoryDatabase(databaseName: "testDb")
+                .Options;
+            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
+            builder.AddUserSecrets<Startup>();
+            var configuration = builder.Build();
+
+            using (var context = new ImagesContext(options))
+            {
+                var controller = new ImageController(context, configuration);
+
+                //Assert
+                Assert.IsType<BadRequestResult>(controller.Create(null));
+            }
+        }
+        // Delete tests
+        [Fact]
         public void CanDeleteDBEntry()
         {
             var options = new DbContextOptionsBuilder<ImagesContext>()
@@ -107,6 +131,31 @@ namespace XUnitTestProject1
 
                 //Assert
                 Assert.IsType<NoContentResult>(controller.Delete(testImage.Id));
+            }
+        }
+
+        [Fact]
+        public void FailToDelete()
+        {
+            var options = new DbContextOptionsBuilder<ImagesContext>()
+                .UseInMemoryDatabase(databaseName: "testDb")
+                .Options;
+
+            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
+            builder.AddUserSecrets<Startup>();
+            var configuration = builder.Build();
+
+            using (var context = new ImagesContext(options))
+            {
+                var controller = new ImageController(context, configuration);
+
+                //Act
+                controller.Create(new Image() { URL = "test Url" });
+                Image testImage = context.Images.
+                                FirstOrDefaultAsync(test => test.URL == "test Url").Result;
+
+                //Assert
+                Assert.IsType<NotFoundResult>(controller.Delete(-1));
             }
         }
     }

@@ -1,14 +1,14 @@
-﻿using System;
+﻿using AMANDAPI.Data;
+using AMANDAPI.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using AMANDAPI.Data;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
-using AMANDAPI.Models;
-using Newtonsoft.Json.Linq;
-using Microsoft.Extensions.Configuration;
 
 
 namespace AMANDAPI.Controllers
@@ -134,7 +134,6 @@ namespace AMANDAPI.Controllers
             var client = new HttpClient();
             //Create our query string dictionary starting with an empty string
             var queryString = HttpUtility.ParseQueryString(string.Empty);
-
             // Set the authentication headers
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", 
                 Configuration["myBingAPIKey"]);
