@@ -21,11 +21,17 @@ namespace AMANDAPI.Controllers
     {
         private readonly IConfiguration Configuration;
         private ImagesContext context;
+        private ImagesContext _context;
 
         //Pull in configure API for user secrets
         public AnalyticsController(IConfiguration configuration)
         {
             Configuration = configuration;
+        }
+
+        public AnalyticsController(ImagesContext context)
+        {
+            _context = context;
         }
 
         public AnalyticsController(ImagesContext context, IConfigurationRoot configuration)
@@ -55,7 +61,8 @@ namespace AMANDAPI.Controllers
             
             return RedirectToAction("GetUrls", "Image", new { data, num });
         }
-        private Analytics Analyze(string body)
+
+        public Analytics Analyze(string body)
         {
             // Create a client.
             ITextAnalyticsAPI client = new TextAnalyticsAPI();

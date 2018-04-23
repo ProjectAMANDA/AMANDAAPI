@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Xunit;
 using AMANDAPI;
 using System.Collections;
+using Microsoft.Extensions.Options;
 
 namespace XUnitTestProject1
 {
@@ -44,7 +45,51 @@ namespace XUnitTestProject1
                 Assert.IsNotType<Analytics>(results);
             }
         }
-        
+
+        [Fact]
+        public void TestingCanAnalyze()
+        {
+            var options = new DbContextOptionsBuilder<ImagesContext>()
+               .UseInMemoryDatabase(databaseName: "testDb")
+               .Options;
+
+            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
+            builder.AddUserSecrets<Startup>();
+            var configuration = builder.Build();
+            using (var context = new ImagesContext(options))
+
+            {
+                var controller = new AnalyticsController(context, configuration);
+
+                //Act
+                var results = controller.Analyze("hello from the past this is me");
+
+                //Assert
+                Assert.IsType<Analytics>(results);
+            }
+
+        }
+
+      /*
+        [Fact]
+        public void GetContextnumber()
+        {
+            var options = new DbContextOptionsBuilder<ImagesContext>()
+                .UseInMemoryDatabase(databaseName: "testDb")
+                .Options;
+
+            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
+            builder.AddUserSecrets<Startup>();
+            var configuration = builder.Build();
+
+            using (ImagesContext _context = new ImagesContext(options))
+            {
+                AnalyticsController controller = new AnalyticsController(_context);
+                int tableCount = controller.GetHashCode().Count();
+                Assert.Equal(6, tableCount);
+            }
+        }
+        */
 
     }
 }
