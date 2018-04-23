@@ -29,7 +29,7 @@ namespace AMANDAPI.Controllers
         /// <summary>
         /// Main meat of the app
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="data">string the image suggestion will be pased upon</param>
         /// <param name="usesentiment"></param>
         /// <param name="num"></param>
         /// <returns></returns>
@@ -39,33 +39,32 @@ namespace AMANDAPI.Controllers
             return  new OkObjectResult(GenerateRecs(data, num));
         }
 
+        // pulling out the logic to make testing easier
         public Reccommendations GenerateRecs(string data, int num)
         {
-            bool usesentiment = false;
-            try
-            {
-                if (num > 6)
-                    throw new Exception();
-            }
-            catch
+            // We only have 5 images in the database
+            if (num > 5)
             {
                 num = 3;
             }
 
             //Try to parse data as a float. If succeed, put the value into sentiment and return true
             //True will get you into the validation block.
+            bool usesentiment = false;
             if (float.TryParse(data, out float sentiment))
             {
-                usesentiment = true;
+                usesentiment = true; // IF the input can be parsed as a float, use sentiment
                 if (sentiment < 0 || sentiment > 1)
                 {
-                    usesentiment = false;
+                    usesentiment = false; // if data can be parsed as a float BUT is not a valid value for sentiment
                     data = sentiment.ToString();
                 }
             }
             IEnumerable<Image> reccomendations = usesentiment ?
                 GetImageBySentiment(sentiment) :
                 BingSearch(data).Result;
+
+            //Repackage into single object
             Reccommendations rec = new Reccommendations()
             {
                 Images = reccomendations.Take(num),
@@ -74,16 +73,6 @@ namespace AMANDAPI.Controllers
                 KeyPhrase = usesentiment ? "" : data
             };
             return rec;
-        }
-
-        public List<Image> GetImageBySentiment(float sentiment)
-        {
-            // comparing an image list by the image sentiment to target sentiment
-            List<Image> Images = _context.Images
-                                .OrderBy(i => Math.Abs(i.Sentiment - sentiment))
-                                // setting to list
-                                .ToList();
-            return Images;
         }
 
         /// <summary>
@@ -123,12 +112,11 @@ namespace AMANDAPI.Controllers
             return View();
         }
 
-        [HttpPut]
-        public IActionResult Edit()
-        {
-            return View();
-        }
-
+        /// <summary>
+        /// Given a query, search bing and retrieve image results. Safe search is set to strict.
+        /// </summary>
+        /// <param name="searchQuery">The query for the bing search</param>
+        /// <returns>a list of Image objects</returns>
         public async Task<IEnumerable<Image>> BingSearch(string searchQuery)
         {
             var client = new HttpClient();
@@ -163,6 +151,22 @@ namespace AMANDAPI.Controllers
             }
             //If Bing did not return a result send back an empty list
             return new List<Image>();
+        }
+
+        /// <summary>
+        /// Given a target sentiment, this will query our database and provide a list of images sorted by the nearness
+        /// of sentiment matching.
+        /// </summary>
+        /// <param name="sentiment">Target sentiment</param>
+        /// <returns>sorted list of Images</returns>
+        public List<Image> GetImageBySentiment(float sentiment)
+        {
+            // comparing an image list by the image sentiment to target sentiment
+            List<Image> Images = _context.Images
+                                .OrderBy(i => Math.Abs(i.Sentiment - sentiment))
+                                // setting to list
+                                .ToList();
+            return Images;
         }
     }
 }
