@@ -54,14 +54,22 @@ Alternatively, if you have done your own analytics and just want to consume our 
 }
 ```
 
-## Json Example
------
-
 ## Frameworks & Dependencies
 -----
 - Entity Framework Core
 - ASP.NET Core
 - Swashbuckle
 - Xunit
--C# ASP.NET Core MVC Application
--Microsoft Azure Services
+- C# ASP.NET Core MVC Application
+- Microsoft Azure Services
+
+## Resources
+-----
+- JSON Editor https://jsoneditoronline.org/
+- API Documentation
+https://azure.microsoft.com/en-us/services/cognitive-services/bing-image-search-api/
+https://dev.cognitive.microsoft.com/docs/services/8336afba49a84475ba401758c0dbf749/operations/56b4433fcf5ff8098cef380c
+https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/
+- Additional Resources
+https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-2.1&tabs=visual-studio
+https://blogs.msdn.microsoft.com/mihansen/2017/09/10/managing-secrets-in-net-core-2-0-apps/
