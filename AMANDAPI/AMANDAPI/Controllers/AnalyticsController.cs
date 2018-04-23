@@ -51,7 +51,10 @@ namespace AMANDAPI.Controllers
         [HttpGet("{usesentiment?}/{num?}")]
         public IActionResult GetText([FromHeader]string text, string usesentiment = "true", string num = "3")
         {
+            //The actual querying of cognitive analytics is called here
             Analytics analysis = Analyze(text);
+
+            //Repackage the results to sent to Image endpoint where actual image suggestion takes place.
             string data = analysis.Keywords.FirstOrDefault();
 
             if (usesentiment == "true")
@@ -59,10 +62,17 @@ namespace AMANDAPI.Controllers
                 data = analysis.Sentiment.ToString();
             }
             
+            // perform Image suggestion
             return RedirectToAction("GetUrls", "Image", new { data, num });
         }
 
-        public Analytics Analyze(string body)
+        /// <summary>
+        /// Query the Azure congnitive analytics API for text analysis. This utilizes a nuget package and is largely the example
+        /// code they provided with a few tweaks.
+        /// </summary>
+        /// <param name="body">Text body to be analyzed</param>
+        /// <returns>an instance of the Analytics class that has the relevant parts of the analysis repackaged for ease of use</returns>
+        public Analytics Analyze(string body)//Note: this was private, but that made testing the controller difficult
         {
             // Create a client.
             ITextAnalyticsAPI client = new TextAnalyticsAPI();
@@ -70,12 +80,14 @@ namespace AMANDAPI.Controllers
            
             client.SubscriptionKey = Configuration["textAPIKey"];
 
-            List<string> keyPhrases = new List<string>();//output
+            // initialize output vars
+            List<string> keyPhrases = new List<string>();
             float sentiment = 0;
 
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
             // Getting key-phrases
+            // this is taken almost word for word from the example code in the docs for the API
             KeyPhraseBatchResult result2 = client.KeyPhrases(
                     new MultiLanguageBatchInput(
                         new List<MultiLanguageInput>()
@@ -83,7 +95,7 @@ namespace AMANDAPI.Controllers
                           new MultiLanguageInput("en", "3", body),
                         }));
 
-            // Unpack key-phrases
+            // Unpack key phrases into list
             foreach (var document in result2.Documents)
             {
                 foreach (string keyphrase in document.KeyPhrases)
@@ -93,7 +105,6 @@ namespace AMANDAPI.Controllers
             }
 
             // Extracting sentiment
-
             SentimentBatchResult result3 = client.Sentiment(
                     new MultiLanguageBatchInput(
                         new List<MultiLanguageInput>()
@@ -107,9 +118,8 @@ namespace AMANDAPI.Controllers
                 sentiment = (float)document.Score;
             }
 
-            // Repack analytic into analytics object for use elsewhere.
+            // Repack analysis into analytics instance for convenience of use.
             return new Analytics() { Keywords = keyPhrases, Sentiment = sentiment };
         }
-
     }
 }
