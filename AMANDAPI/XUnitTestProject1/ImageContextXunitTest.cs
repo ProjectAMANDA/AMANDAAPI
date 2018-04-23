@@ -43,6 +43,7 @@ namespace XUnitTestProject1
         [InlineData("0.5", 3)]
         [InlineData("cats", 9)]
         [InlineData("0.5", -1)]
+        [InlineData("1.4", 3)]
         public void CanGenerateURLs( string query, int numResults)
         {
             var options = new DbContextOptionsBuilder<ImagesContext>()
