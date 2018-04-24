@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
-using AMANDAPI.Controllers;
-using AMANDAPI.Data;
+﻿using Xunit;
 using AMANDAPI.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace XUnitTestProject1
 {

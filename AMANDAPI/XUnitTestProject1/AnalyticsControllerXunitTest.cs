@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using AMANDAPI.Models;
+﻿using AMANDAPI.Models;
 using AMANDAPI.Data;
-using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
-using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
-using Microsoft.AspNetCore.Routing;
 using AMANDAPI.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 using AMANDAPI;
-using System.Collections;
-using Microsoft.Extensions.Options;
 
 namespace XUnitTestProject1
 {

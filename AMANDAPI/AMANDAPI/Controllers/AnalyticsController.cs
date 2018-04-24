@@ -7,7 +7,6 @@ using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
-using AMANDAPI.Data;
 
 namespace AMANDAPI.Controllers
 {
