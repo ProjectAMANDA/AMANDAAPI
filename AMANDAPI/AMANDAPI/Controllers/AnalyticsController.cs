@@ -20,23 +20,10 @@ namespace AMANDAPI.Controllers
     public class AnalyticsController : Controller
     {
         private readonly IConfiguration Configuration;
-        private ImagesContext context;
-        private ImagesContext _context;
 
         //Pull in configure API for user secrets
         public AnalyticsController(IConfiguration configuration)
         {
-            Configuration = configuration;
-        }
-
-        public AnalyticsController(ImagesContext context)
-        {
-            _context = context;
-        }
-
-        public AnalyticsController(ImagesContext context, IConfigurationRoot configuration)
-        {
-            this.context = context;
             Configuration = configuration;
         }
 
