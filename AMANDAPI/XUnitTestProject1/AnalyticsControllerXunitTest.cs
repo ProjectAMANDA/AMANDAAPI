@@ -36,7 +36,7 @@ namespace XUnitTestProject1
 
             using (var context = new ImagesContext(options))
             {
-                var controller = new AnalyticsController(context, configuration);
+                var controller = new AnalyticsController( configuration);
 
                 //Act
                 var results = controller.GetText("true");
@@ -59,7 +59,7 @@ namespace XUnitTestProject1
             using (var context = new ImagesContext(options))
 
             {
-                var controller = new AnalyticsController(context, configuration);
+                var controller = new AnalyticsController( configuration);
 
                 //Act
                 var results = controller.Analyze("hello from the past this is me");
